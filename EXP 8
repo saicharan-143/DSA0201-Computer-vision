@@ -1,0 +1,13 @@
+import cv2
+from google.colab.patches import cv2_imshow
+def resize_image_with_scale(input_path, scale_factor):
+    image = cv2.imread(input_path)
+    height, width = image.shape[:2]
+    print("Original image shape:", image.shape)
+    new_width = int(width * scale_factor)
+    new_height = int(height * scale_factor)
+    resized_image = cv2.resize(image, (new_width, new_height))
+    cv2_imshow(image)
+    cv2_imshow(resized_image)
+    print(f"Image resized from {width}x{height} to {new_width}x{new_height}")
+resize_image_with_scale("/content/prabha.jpg", 0.5)
