@@ -1,0 +1,31 @@
+import cv2
+import time
+
+cap = cv2.VideoCapture(0)
+if not cap.isOpened():
+    print("Webcam not accessible.")
+    exit()
+
+speed = 1  # Default to normal speed
+print("Press 's' = slow, 'f' = fast, 'n' = normal, 'q' = quit.")
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        break
+
+    cv2.imshow('Webcam', frame)
+    time.sleep(speed)
+
+    key = cv2.waitKey(1) & 0xFF
+    if key == ord('q'):
+        break
+    elif key == ord('s'):
+        speed = 0.1
+    elif key == ord('f'):
+        speed = 0.01
+    elif key == ord('n'):
+        speed = 1
+
+cap.release()
+cv2.destroyAllWindows()
