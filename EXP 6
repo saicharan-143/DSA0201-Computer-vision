@@ -1,0 +1,36 @@
+from IPython.display import Video, display
+
+
+
+video_path = '/content/traffic.mp4'
+
+cap = cv2.VideoCapture(video_path)
+
+fps = cap.get(cv2.CAP_PROP_FPS)
+
+w, h = int(cap.get(3)), int(cap.get(4))
+
+
+for label, speed in {'normal': 1.0, 'slow': 0.5, 'fast': 2.0}.items():
+
+        cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+
+        out = cv2.VideoWriter(f'{label}.mp4', cv2.VideoWriter_fourcc(*'mp4v'), fps * speed, (w, h))
+
+        while cap.isOpened():
+
+           ret, frame = cap.read()
+
+           if not ret: break
+           out.write(frame)
+
+        out.release()
+
+
+cap.release()
+
+for label in ['normal', 'slow', 'fast']:
+
+      print(f"{label.capitalize()} motion:")
+
+display(Video(f'{label}.mp4', embed=True))
