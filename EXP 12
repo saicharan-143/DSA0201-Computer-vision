@@ -1,0 +1,14 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+image = cv2.imread('/content/prabha.jpg')
+if image is None: exit()
+image = cv2.resize(image, (int(image.shape[1] * 0.5), int(image.shape[0] * 0.5)))
+pts1 = np.float32([[30, 30], [image.shape[1]-30, 30], [30, image.shape[0]-30], [image.shape[1]-30, image.shape[0]-30]])
+pts2 = np.float32([[0, 0], [image.shape[1]-1, 0], [0, image.shape[0]-1], [image.shape[1]-1, image.shape[0]-1]])
+M = cv2.getPerspectiveTransform(pts1, pts2)
+perspective_transformed = cv2.warpPerspective(image, M, (image.shape[1], image.shape[0]))
+plt.imshow(cv2.cvtColor(perspective_transformed, cv2.COLOR_BGR2RGB))
+plt.title('Perspective Transformed Image')
+plt.axis('off')
+plt.show()
