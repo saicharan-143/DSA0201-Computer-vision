@@ -1,0 +1,25 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+cap = cv2.VideoCapture('/content/output_reversed.mp4')
+if not cap.isOpened():
+    print("Error: Couldn't open the video.")
+    exit()
+fps = cap.get(cv2.CAP_PROP_FPS)
+width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+pts1 = np.float32([[50, 50], [width-50, 50], [50, height-50], [width-50, height-50]])
+pts2 = np.float32([[0, 0], [width-1, 0], [0, height-1], [width-1, height-1]])
+M = cv2.getPerspectiveTransform(pts1, pts2)
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        break
+    transformed_frame = cv2.warpPerspective(frame, M, (width, height))
+    transformed_frame_rgb = cv2.cvtColor(transformed_frame, cv2.COLOR_BGR2RGB)
+    plt.imshow(transformed_frame_rgb)
+    plt.title('Transformed Video Frame')
+    plt.axis('off')
+    plt.show()
+    plt.pause(1 / fps)
+cap.release()
