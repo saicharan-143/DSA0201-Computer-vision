@@ -1,0 +1,27 @@
+import numpy as np
+xy1 = np.array([[0, 0], [1, 0], [1, 1], [0, 1]])
+xy2 = np.array([[0, 0], [2, 0], [2, 2], [0, 2]])
+N = xy1.shape[0]
+A = []
+for i in range(N):
+    x1, y1 = xy1[i]
+    x2, y2 = xy2[i]
+
+    A.append([-x1, -y1, -1, 0, 0, 0, x1*x2, y1*x2, x2])
+    A.append([0, 0, 0, -x1, -y1, -1, x1*y2, y1*y2, y2])
+A = np.array(A)
+
+_, _, VT = np.linalg.svd(A)
+h = VT[-1]
+H = h.reshape(3, 3)
+print("Homography Matrix:")
+print(H)
+
+ones = np.ones((xy1.shape[0], 1))
+xy1_homogeneous = np.hstack((xy1, ones))
+
+xy2_homogeneous = xy1_homogeneous @ H.T
+
+xy2_transformed = xy2_homogeneous[:, :2] / xy2_homogeneous[:, 2].reshape(-1, 1)
+
+print("Transformed Point")
