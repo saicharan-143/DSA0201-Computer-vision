@@ -1,0 +1,30 @@
+import cv2
+import numpy as np
+from google.colab.patches import cv2_imshow
+
+# Load the image
+image = cv2.imread('/content/prabha.jpg')
+if image is None:
+    raise FileNotFoundError("Could not load the image. Check the path.")
+
+# Convert the image to grayscale
+gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+# Apply Sobel operator for edge detection
+# Sobel in X direction (horizontal edges)
+sobel_x = cv2.Sobel(gray_image, cv2.CV_64F, 1, 0, ksize=3)
+
+# Sobel in Y direction (vertical edges)
+sobel_y = cv2.Sobel(gray_image, cv2.CV_64F, 0, 1, ksize=3)
+
+# Compute the magnitude of gradients (edge magnitude)
+edges = cv2.magnitude(sobel_x, sobel_y)
+
+# Convert back to 8-bit for visualization
+edges = cv2.convertScaleAbs(edges)
+
+# Show the result
+cv2_imshow(edges)
+
+# Optionally, save the edge-detected image
+cv2.imwrite('edges_image.jpg', edges)
