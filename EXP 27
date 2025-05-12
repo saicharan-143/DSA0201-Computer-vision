@@ -1,0 +1,24 @@
+import cv2
+from google.colab.patches import cv2_imshow  
+
+src_image = cv2.imread('/content/man.jpg')
+if src_image is None:
+    raise FileNotFoundError("Could not load source image. Check the path.")
+
+dst_image = cv2.imread('/content/prabha.jpg')
+if dst_image is None:
+    raise FileNotFoundError("Could not load destination image. Check the path.")
+
+x, y, w, h = 100, 100, 200, 200
+cropped_region = src_image[y:y+h, x:x+w]
+
+paste_x, paste_y = 50, 50
+
+if paste_y + h > dst_image.shape[0] or paste_x + w > dst_image.shape[1]:
+    raise ValueError("Cropped region doesn't fit in the destination image.")
+
+dst_image[paste_y:paste_y+h, paste_x:paste_x+w] = cropped_region
+
+cv2_imshow(dst_image)
+
+cv2.imwrite('output.jpg', dst_image)
