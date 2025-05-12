@@ -1,0 +1,19 @@
+import cv2
+import numpy as np
+from google.colab.patches import cv2_imshow
+
+image = cv2.imread('/content/prabha.jpg')
+if image is None:
+    raise FileNotFoundError("Could not load the image. Check the path.")
+
+gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+_, binary_image = cv2.threshold(gray_image, 127, 255, cv2.THRESH_BINARY)
+
+kernel = np.ones((5, 5), np.uint8) 
+
+dilated_image = cv2.dilate(binary_image, kernel, iterations=1)
+
+cv2_imshow(dilated_image)
+
+cv2.imwrite('dilated_image.jpg', dilated_image)
