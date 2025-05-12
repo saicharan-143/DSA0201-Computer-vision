@@ -1,0 +1,26 @@
+import cv2
+import numpy as np
+from google.colab.patches import cv2_imshow
+
+# Load the image
+image = cv2.imread('/content/prabha.jpg')
+if image is None:
+    raise FileNotFoundError("Could not load the image. Check the path.")
+
+# Convert the image to grayscale
+gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+# Threshold the image to get a binary image
+_, binary_image = cv2.threshold(gray_image, 127, 255, cv2.THRESH_BINARY)
+
+# Define a kernel (structuring element)
+kernel = np.ones((5, 5), np.uint8)  # A 5x5 square kernel
+
+# Apply the erosion operation
+eroded_image = cv2.erode(binary_image, kernel, iterations=1)
+
+# Show the eroded image
+cv2_imshow(eroded_image)
+
+# Optionally, save the result
+cv2.imwrite('eroded_image.jpg', eroded_image)
